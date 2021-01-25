@@ -19,6 +19,11 @@ namespace AppGraZaDuzoZaMaloCLI
 
         public void KomunikatPowitalny() => WriteLine("Wylosowałem liczbę z zakresu ");
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <exception cref="KoniecGryException"></exception>
+        /// <returns>Selected number.</returns>
         public int WczytajPropozycje()
         {
             int wynik = 0;
@@ -45,6 +50,10 @@ namespace AppGraZaDuzoZaMaloCLI
                 {
                     WriteLine("Przesadziłeś. Podana przez Ciebie wartość jest zła! Spróbuj raz jeszcze.");
                     continue;
+                }
+                catch (KoniecGryException)
+                {
+                    throw new KoniecGryException();
                 }
                 catch (Exception)
                 {
