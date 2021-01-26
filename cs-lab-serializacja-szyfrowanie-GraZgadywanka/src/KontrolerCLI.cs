@@ -46,8 +46,11 @@ namespace AppGraZaDuzoZaMaloCLI
         {
             widok.CzyscEkran();
 
-            // ustaw zakres do losowania
-            gra = new Gra(MinZakres, MaxZakres); //może zgłosić ArgumentException
+            try {
+                gra = new Gra(MinZakres, MaxZakres);
+            } catch {
+                gra = new Gra(1, 100);
+            }
 
             if (Gra.SaveExists())
             {
