@@ -49,24 +49,24 @@ namespace AppGraZaDuzoZaMaloCLI
             // ustaw zakres do losowania
             gra = new Gra(MinZakres, MaxZakres); //może zgłosić ArgumentException
 
-            // sprawdz czy jest zapis gry
-            // - jesli tak zapytaj czy kontynuowac od tego momentu (oraz tutaj tez wyswietla sumaryczne informacje dot. przerwanej rozgrywki)
-            //    = jesli tak: wczytuje gre i usuwa plik
-            //    = jesli nie: to usuwa plik i zaczyna nowa ge
             if (Gra.SaveExists())
             {
-                var gameSave = Gra.GetGameSave();
-                widok.ShowGameSummary(gameSave);
+                try { 
+                    var gameSave = Gra.GetGameSave();
+                    widok.ShowGameSummary(gameSave);
 
-                if (widok.ChceszKontynuowac("Znaleziono poprzedni zapis gry, czy chcesz kontynuować (t/n)?"))
-                {
-                    gra.LoadSave(gameSave);
-                    Gra.DeleteSave();
+                    if (widok.ChceszKontynuowac("Znaleziono poprzedni zapis gry, czy chcesz kontynuować (t/n)?"))
+                    {
+                        gra.LoadSave(gameSave);
+                        Gra.DeleteSave();
+                    }
                 }
-                else
+                catch 
                 {
                     Gra.DeleteSave();
+                    Console.WriteLine("Nie udało się wczytać zapisu gry.");
                 }
+
             }
 
             do

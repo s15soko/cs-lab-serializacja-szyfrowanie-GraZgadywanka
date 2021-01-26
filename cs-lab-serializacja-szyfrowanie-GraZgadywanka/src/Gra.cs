@@ -259,9 +259,17 @@ namespace GraZaDuzoZaMalo.Model
         /// <summary>
         /// Gets game save.
         /// </summary>
+        /// <exception cref="SerializationException"></exception>
         public static Gra GetGameSave(string path = "game.xml")
         {
-            return DataContractXMLSerialization.DeserializeFromFile<Gra>(path);
+            try
+            {
+                return DataContractXMLSerialization.DeserializeFromFile<Gra>(path);
+            } 
+            catch
+            {
+                throw new SerializationException();
+            }
         }
     }
 }
