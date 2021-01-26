@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraZaDuzoZaMalo.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -86,12 +87,12 @@ namespace AppGraZaDuzoZaMaloCLI
                 return;
             }
 
-            WriteLine("Nr    Propozycja     Odpowiedź     Czas    Status");
+            WriteLine("Nr   Propozycja     Odpowiedź     Czas    Status");
             WriteLine("=================================================");
             int i = 1;
             foreach ( var ruch in kontroler.ListaRuchow)
             {
-                WriteLine($"{i}     {ruch.Liczba}      {ruch.Wynik}  {ruch.Czas.Second}   {ruch.StatusGry}");
+                WriteLine($"{i}    {ruch.Liczba}             {ruch.Wynik}         {ruch.Czas.Second}     {ruch.StatusGry}");
                 i++;
             }
         }
@@ -115,6 +116,16 @@ namespace AppGraZaDuzoZaMaloCLI
             Console.ForegroundColor = ConsoleColor.Green;
             WriteLine("Trafiono!");
             Console.ResetColor();
+        }
+
+        public void ShowGameSummary(Gra game)
+        {
+            WriteLine("=================================================");
+            WriteLine("============== Poprzedni stan gry ===============");
+            WriteLine($"Minimalna liczba: {game.MinLiczbaDoOdgadniecia}");
+            WriteLine($"Maksymalna liczba: {game.MaxLiczbaDoOdgadniecia}");
+            WriteLine($"Inne dane...");
+            WriteLine();
         }
     }
 

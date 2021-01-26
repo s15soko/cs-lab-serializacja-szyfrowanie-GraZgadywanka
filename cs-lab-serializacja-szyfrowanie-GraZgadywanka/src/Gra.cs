@@ -72,8 +72,7 @@ namespace GraZaDuzoZaMalo.Model
         public int MinLiczbaDoOdgadniecia { get; private set; } = 1;
 
         [DataMember(Order = 10)]
-        readonly private int liczbaDoOdgadniecia;
-
+        private int liczbaDoOdgadniecia;
 
         /// <summary>
         /// Typ wyliczeniowy opisujący możliwe statusy gry.
@@ -96,7 +95,6 @@ namespace GraZaDuzoZaMalo.Model
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Poddana"/> po uruchomieniu metody <see cref="Przerwij"/>.</para>
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Zakonczona"/> w metodzie <see cref="Propozycja(int)"/>, po podaniu poprawnej, odgadywanej liczby.</para>
         /// </remarks>
-        [DataMember(Order = 5)]
         public Status StatusGry { get; private set; }
 
         private List<Ruch> listaRuchow;
@@ -235,9 +233,27 @@ namespace GraZaDuzoZaMalo.Model
             return File.Exists(path);
         }
 
+        /// <summary>
+        /// Load game from save file.
+        /// </summary>
+        /// <param name="savedGame">Game object.</param>
         public void LoadSave(Gra savedGame)
         {
-            throw new NotImplementedException();
+            this.MaxLiczbaDoOdgadniecia = savedGame.MaxLiczbaDoOdgadniecia;
+            this.MinLiczbaDoOdgadniecia = savedGame.MinLiczbaDoOdgadniecia;
+            this.liczbaDoOdgadniecia = savedGame.liczbaDoOdgadniecia;
+        }
+
+        /// <summary>
+        /// Delete save file.
+        /// </summary>
+        public static void DeleteSave()
+        {
+            var path = Gra.GetSavePath();
+            if(File.Exists(path))
+            {
+                File.Delete(path);
+            }
         }
 
         /// <summary>
