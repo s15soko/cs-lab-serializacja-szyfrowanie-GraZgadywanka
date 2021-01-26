@@ -1,6 +1,10 @@
-﻿using System;
+﻿using cs_lab_serializacja_szyfrowanie_GraZgadywanka.src;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,6 +49,8 @@ namespace GraZaDuzoZaMalo.Model
     /// Pojedynczy Ruch
     /// </para>
     /// </remarks>
+    [Serializable]
+    [DataContract]
     public class Gra
     {
         /// <summary>
@@ -53,7 +59,8 @@ namespace GraZaDuzoZaMalo.Model
         /// <value>
         /// Domyślna wartość wynosi 100. Wartość jest ustawiana w konstruktorze i nie może zmienić się podczas życia obiektu gry.
         /// </value>
-        public int MaxLiczbaDoOdgadniecia { get; } = 100;
+        [DataMember(Order = 14)]
+        public int MaxLiczbaDoOdgadniecia { get; private set; } = 100;
 
         /// <summary>
         /// Dolne ograniczenie losowanej liczby, która ma zostać odgadnięta.
@@ -61,9 +68,10 @@ namespace GraZaDuzoZaMalo.Model
         /// <value>
         /// Domyślna wartość wynosi 1. Wartość jest ustawiana w konstruktorze i nie może zmienić się podczas życia obiektu gry.
         /// </value>
-        public int MinLiczbaDoOdgadniecia { get; } = 1;
+        [DataMember(Order = 12)]
+        public int MinLiczbaDoOdgadniecia { get; private set; } = 1;
 
-
+        [DataMember(Order = 10)]
         readonly private int liczbaDoOdgadniecia;
 
 
@@ -88,8 +96,8 @@ namespace GraZaDuzoZaMalo.Model
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Poddana"/> po uruchomieniu metody <see cref="Przerwij"/>.</para>
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Zakonczona"/> w metodzie <see cref="Propozycja(int)"/>, po podaniu poprawnej, odgadywanej liczby.</para>
         /// </remarks>
+        [DataMember(Order = 5)]
         public Status StatusGry { get; private set; }
-
 
         private List<Ruch> listaRuchow;
 
@@ -124,7 +132,6 @@ namespace GraZaDuzoZaMalo.Model
         }
 
         public Gra() : this(1, 100) { }
-
 
         /// <summary>
         /// Każde zadanie pytania o wynik skutkuje dopisaniem do listy
@@ -197,6 +204,48 @@ namespace GraZaDuzoZaMalo.Model
             }
         }
 
+        //
 
+        /// <summary>
+        /// Gets default save path.
+        /// </summary>
+        /// <returns>Default save path.</returns>
+        public static string GetSavePath()
+        {
+            return "game.xml";
+        }
+
+        /// <summary>
+        /// Save current game.
+        /// </summary>
+        public static void SaveGame(Gra game)
+        {
+            Console.WriteLine("Saving the game...");
+            var path = Gra.GetSavePath();
+            DataContractXMLSerialization.SerializeToFile<Gra>(game, path); 
+        }
+
+        /// <summary>
+        /// Its check whether there is some saved game.
+        /// </summary>
+        /// <returns>If a save exists.</returns>
+        public static bool SaveExists()
+        {
+            var path = Gra.GetSavePath();
+            return File.Exists(path);
+        }
+
+        public void LoadSave(Gra savedGame)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Gets game save.
+        /// </summary>
+        public static Gra GetGameSave(string path = "game.xml")
+        {
+            return DataContractXMLSerialization.DeserializeFromFile<Gra>(path);
+        }
     }
 }
