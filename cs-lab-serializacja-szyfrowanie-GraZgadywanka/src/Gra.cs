@@ -99,14 +99,19 @@ namespace GraZaDuzoZaMalo.Model
         /// </remarks>
         public Status StatusGry { get; private set; }
 
-        private List<Ruch> listaRuchow;
+        private List<Ruch> listaRuchow { get; set; }
 
         public IReadOnlyList<Ruch> ListaRuchow { get { return listaRuchow.AsReadOnly(); } }
 
         /// <summary>
         /// Czas rozpoczęcia gry, ustawiany w momencie utworzenia obiektu gry, w konstruktorze. Nie można go już zmodyfikować podczas życia obiektu.
         /// </summary>
-        public DateTime CzasRozpoczecia { get; }
+        [DataMember(Order = 25)]
+        public DateTime CzasRozpoczecia { get; private set; }
+
+        /// <summary>
+        /// Ustawiana w momencie odgadnięcia poszukiwanej liczby.
+        /// </summary>
         public DateTime? CzasZakonczenia { get; private set; }
 
         /// <summary>
@@ -244,6 +249,7 @@ namespace GraZaDuzoZaMalo.Model
             this.MaxLiczbaDoOdgadniecia = savedGame.MaxLiczbaDoOdgadniecia;
             this.MinLiczbaDoOdgadniecia = savedGame.MinLiczbaDoOdgadniecia;
             this.liczbaDoOdgadniecia = savedGame.liczbaDoOdgadniecia;
+            this.CzasRozpoczecia = savedGame.CzasRozpoczecia;
         }
 
         /// <summary>
