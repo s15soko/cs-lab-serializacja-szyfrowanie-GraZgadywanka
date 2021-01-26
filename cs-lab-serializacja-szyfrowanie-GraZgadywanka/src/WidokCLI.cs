@@ -67,7 +67,7 @@ namespace AppGraZaDuzoZaMaloCLI
         public void OpisGry()
         {
             WriteLine("Gra w \"Za dużo za mało\"." + Environment.NewLine
-                + "Twoimm zadaniem jest odgadnąć liczbę, którą wylosował komputer." + Environment.NewLine + "Na twoje propozycje komputer odpowiada: za dużo, za mało albo trafiłeś");
+                + "Twoim zadaniem jest odgadnąć liczbę, którą wylosował komputer." + Environment.NewLine + "Na twoje propozycje komputer odpowiada: za dużo, za mało albo trafiłeś");
         }
 
         public bool ChceszKontynuowac( string prompt )
