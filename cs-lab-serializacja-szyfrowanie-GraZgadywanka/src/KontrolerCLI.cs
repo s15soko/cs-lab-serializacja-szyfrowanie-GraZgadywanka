@@ -92,8 +92,9 @@ namespace AppGraZaDuzoZaMaloCLI
 
                 Console.WriteLine(propozycja);
 
-                //Console.WriteLine( gra.Ocena(propozycja) );
-                //oceń propozycję, break
+                widok.CzyscEkran();
+                widok.HistoriaGry();
+
                 switch ( gra.Ocena(propozycja) )
                 {
                     case ZaDuzo:
@@ -108,7 +109,7 @@ namespace AppGraZaDuzoZaMaloCLI
                     default:
                         break;
                 }
-                widok.HistoriaGry();
+                
             }
             while (gra.StatusGry == Gra.Status.WTrakcie);
                       

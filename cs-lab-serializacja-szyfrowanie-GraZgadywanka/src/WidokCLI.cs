@@ -87,12 +87,12 @@ namespace AppGraZaDuzoZaMaloCLI
                 return;
             }
 
-            WriteLine("Nr   Propozycja     Odpowiedź     Czas    Status");
             WriteLine("=================================================");
             int i = 1;
             foreach ( var ruch in kontroler.ListaRuchow)
             {
-                WriteLine($"{i}    {ruch.Liczba}             {ruch.Wynik}         {ruch.Czas.Second}     {ruch.StatusGry}");
+                var time = $"{ruch.Czas.Hour:D2}:{ruch.Czas.Minute:D2}:{ruch.Czas.Second:D2}";
+                WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
                 i++;
             }
         }
