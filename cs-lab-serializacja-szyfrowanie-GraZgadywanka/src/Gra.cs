@@ -84,7 +84,9 @@ namespace GraZaDuzoZaMalo.Model
             /// <summary>Status gry ustawiany w momencie odgadnięcia poszukiwanej liczby.</summary>
             Zakonczona,
             /// <summary>Status gry ustawiany w momencie jawnego przerwania gry przez gracza.</summary>
-            Poddana
+            Poddana,
+            /// <summary>Status gry ustawiany w momencie zatrzymania gry.</summary>
+            Zawieszona
         };
 
         /// <summary>
