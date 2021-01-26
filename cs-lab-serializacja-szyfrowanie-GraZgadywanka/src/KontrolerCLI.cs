@@ -16,6 +16,8 @@ namespace AppGraZaDuzoZaMaloCLI
         private Gra gra;
         private WidokCLI widok;
 
+        private bool CanContinue { get; set; }
+
         public int MinZakres { get; private set; } = 1;
         public int MaxZakres { get; private set; } = 100;
 
@@ -28,21 +30,23 @@ namespace AppGraZaDuzoZaMaloCLI
         {
             gra = new Gra();
             widok = new WidokCLI(this);
+            CanContinue = true;
         }
 
         public void Uruchom()
         {
             widok.OpisGry();
-            while( widok.ChceszKontynuowac("Czy chcesz kontynuować aplikację (t/n)? ") )
+            while( CanContinue && widok.ChceszKontynuowac("Czy chcesz kontynuować aplikację (t/n)? ") )
+            {
                 UruchomRozgrywke();
+            }
         }
 
         public void UruchomRozgrywke()
         {
             widok.CzyscEkran();
+
             // ustaw zakres do losowania
-
-
             gra = new Gra(MinZakres, MaxZakres); //może zgłosić ArgumentException
 
             do
@@ -56,15 +60,18 @@ namespace AppGraZaDuzoZaMaloCLI
                 catch( KoniecGryException)
                 {
                     gra.Przerwij();
+                    Gra.SaveGame(gra);
+                    CanContinue = false;
                 }
+
+                if (gra.StatusGry == Gra.Status.Poddana) 
+                    break;
 
                 Console.WriteLine(propozycja);
 
-                if (gra.StatusGry == Gra.Status.Poddana) break;
-
                 //Console.WriteLine( gra.Ocena(propozycja) );
                 //oceń propozycję, break
-                switch( gra.Ocena(propozycja) )
+                switch ( gra.Ocena(propozycja) )
                 {
                     case ZaDuzo:
                         widok.KomunikatZaDuzo();
