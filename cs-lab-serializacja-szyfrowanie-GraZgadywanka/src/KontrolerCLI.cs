@@ -21,6 +21,8 @@ namespace AppGraZaDuzoZaMaloCLI
         public int MinZakres { get; private set; } = 1;
         public int MaxZakres { get; private set; } = 100;
 
+        public TimeSpan CalkowityCzasGry => gra.CalkowityCzasGry;
+
         public IReadOnlyList<Gra.Ruch> ListaRuchow {
             get
             { return gra.ListaRuchow;  }
@@ -93,10 +95,11 @@ namespace AppGraZaDuzoZaMaloCLI
 
                 Console.WriteLine(propozycja);
 
+                var result = gra.Ocena(propozycja);
                 widok.CzyscEkran();
                 widok.HistoriaGry();
 
-                switch ( gra.Ocena(propozycja) )
+                switch (result)
                 {
                     case ZaDuzo:
                         widok.KomunikatZaDuzo();

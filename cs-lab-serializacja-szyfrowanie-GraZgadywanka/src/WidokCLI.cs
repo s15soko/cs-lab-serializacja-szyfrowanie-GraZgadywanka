@@ -92,7 +92,19 @@ namespace AppGraZaDuzoZaMaloCLI
             foreach ( var ruch in kontroler.ListaRuchow)
             {
                 var time = $"{ruch.Czas.Hour:D2}:{ruch.Czas.Minute:D2}:{ruch.Czas.Second:D2}";
-                WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
+                
+                if(ruch.StatusGry == Gra.Status.Zakonczona)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}.");
+                    WriteLine($"Całkowity czas gry: {kontroler.CalkowityCzasGry}, status: {ruch.StatusGry}.");
+                    Console.ResetColor();
+                } 
+                else
+                {
+                    WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
+                }
+
                 i++;
             }
         }
@@ -122,9 +134,9 @@ namespace AppGraZaDuzoZaMaloCLI
         {
             WriteLine("=================================================");
             WriteLine("============== Poprzedni stan gry ===============");
+            WriteLine($"Czas rozpoczecia: {game.CzasRozpoczecia}");
             WriteLine($"Minimalna liczba: {game.MinLiczbaDoOdgadniecia}");
             WriteLine($"Maksymalna liczba: {game.MaxLiczbaDoOdgadniecia}");
-            WriteLine($"Inne dane...");
             WriteLine();
         }
     }
