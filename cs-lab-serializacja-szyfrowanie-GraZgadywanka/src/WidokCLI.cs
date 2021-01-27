@@ -113,7 +113,16 @@ namespace AppGraZaDuzoZaMaloCLI
                 }
                 else
                 {
-                    WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
+                    if (ruch.Liczba != null)
+                    {
+                        WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        WriteLine($"Nr: {i}, czas: {time}, status: {ruch.StatusGry}.");
+                        Console.ResetColor();
+                    }
                 }
 
                 i++;
