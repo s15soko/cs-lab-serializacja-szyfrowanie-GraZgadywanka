@@ -59,7 +59,7 @@ namespace GraZaDuzoZaMalo.Model
         /// <value>
         /// Domyślna wartość wynosi 100. Wartość jest ustawiana w konstruktorze i nie może zmienić się podczas życia obiektu gry.
         /// </value>
-        [DataMember(Order = 14)]
+        [DataMember(Order = 6)]
         public int MaxLiczbaDoOdgadniecia { get; private set; } = 100;
 
         /// <summary>
@@ -68,10 +68,10 @@ namespace GraZaDuzoZaMalo.Model
         /// <value>
         /// Domyślna wartość wynosi 1. Wartość jest ustawiana w konstruktorze i nie może zmienić się podczas życia obiektu gry.
         /// </value>
-        [DataMember(Order = 12)]
+        [DataMember(Order = 4)]
         public int MinLiczbaDoOdgadniecia { get; private set; } = 1;
 
-        [DataMember(Order = 10)]
+        [DataMember(Order = 2)]
         private int liczbaDoOdgadniecia;
 
         /// <summary>
@@ -97,6 +97,7 @@ namespace GraZaDuzoZaMalo.Model
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Poddana"/> po uruchomieniu metody <see cref="Przerwij"/>.</para>
         /// <para>Zmiana wartości zmiennej na <see cref="Gra.Status.Zakonczona"/> w metodzie <see cref="Propozycja(int)"/>, po podaniu poprawnej, odgadywanej liczby.</para>
         /// </remarks>
+        [DataMember(Order = 10)]
         public Status StatusGry { get; private set; }
 
         private List<Ruch> listaRuchow;
@@ -105,7 +106,7 @@ namespace GraZaDuzoZaMalo.Model
         /// <summary>
         /// Czas rozpoczęcia gry, ustawiany w momencie utworzenia obiektu gry, w konstruktorze. Nie można go już zmodyfikować podczas życia obiektu.
         /// </summary>
-        [DataMember(Order = 25)]
+        [DataMember(Order = 8)]
         public DateTime CzasRozpoczecia { get; private set; }
 
         /// <summary>
@@ -266,9 +267,12 @@ namespace GraZaDuzoZaMalo.Model
         /// <summary>
         /// Save current game.
         /// </summary>
-        public static void SaveGame(Gra game)
+        public static void SaveGame(Gra game, bool showInfo = true)
         {
-            Console.WriteLine("Saving the game...");
+            if (showInfo) {
+                Console.WriteLine("Saving the game...");
+            }
+            
             var path = Gra.GetSavePath();
             DataContractXMLSerialization.SerializeToFile<Gra>(game, path); 
         }
@@ -293,6 +297,7 @@ namespace GraZaDuzoZaMalo.Model
             this.MinLiczbaDoOdgadniecia = savedGame.MinLiczbaDoOdgadniecia;
             this.liczbaDoOdgadniecia = savedGame.liczbaDoOdgadniecia;
             this.CzasRozpoczecia = savedGame.CzasRozpoczecia;
+            this.StatusGry = savedGame.StatusGry;
         }
 
         /// <summary>

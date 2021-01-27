@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using GraZaDuzoZaMalo.Model;
 using static GraZaDuzoZaMalo.Model.Gra.Odpowiedz;
@@ -17,6 +18,7 @@ namespace AppGraZaDuzoZaMaloCLI
         private Gra gra;
         private WidokCLI widok;
 
+        private bool CanOverrideSave { get; set; }
         private bool CanContinue { get; set; }
 
         public int MinZakres { get; private set; } = 1;
@@ -34,10 +36,31 @@ namespace AppGraZaDuzoZaMaloCLI
             gra = new Gra();
             widok = new WidokCLI(this);
             CanContinue = true;
+            CanOverrideSave = false;
+        }
+
+        public async void Background()
+        {
+            var timeInMs = 5000;
+
+            while (true)
+            {
+                var delayTask = Task.Delay(timeInMs);
+                if(CanOverrideSave && (gra.StatusGry == Gra.Status.WTrakcie || gra.StatusGry == Gra.Status.Zawieszona))
+                {
+                    Gra.SaveGame(gra, false);
+                }
+
+                await delayTask;
+            }
         }
 
         public void Uruchom()
         {
+            ThreadStart childref = new ThreadStart(Background);
+            Thread childThread = new Thread(childref);
+            childThread.Start();
+
             widok.OpisGry();
             while( CanContinue && widok.ChceszKontynuowac("Czy chcesz kontynuować aplikację (t/n)? ") )
             {
@@ -73,8 +96,9 @@ namespace AppGraZaDuzoZaMaloCLI
                     Gra.DeleteSave();
                     Console.WriteLine("Nie udało się wczytać zapisu gry.");
                 }
-
             }
+
+            CanOverrideSave = true;
 
             do
             {
