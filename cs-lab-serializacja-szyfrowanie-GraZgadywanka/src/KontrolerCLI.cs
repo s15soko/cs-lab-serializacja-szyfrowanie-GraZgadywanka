@@ -61,8 +61,9 @@ namespace AppGraZaDuzoZaMaloCLI
                     if (widok.ChceszKontynuowac("Znaleziono poprzedni zapis gry, czy chcesz kontynuować (t/n)?"))
                     {
                         gra.LoadSave(gameSave);
-                        Gra.DeleteSave();
                     }
+
+                    Gra.DeleteSave();
                 }
                 catch 
                 {
