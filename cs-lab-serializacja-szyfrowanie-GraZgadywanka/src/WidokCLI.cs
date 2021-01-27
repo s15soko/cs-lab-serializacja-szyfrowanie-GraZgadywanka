@@ -10,8 +10,6 @@ namespace AppGraZaDuzoZaMaloCLI
 {
     class WidokCLI
     {
-        public const char ZNAK_ZAKONCZENIA_GRY = 'X';
-
         private KontrolerCLI kontroler;
 
         public WidokCLI(KontrolerCLI kontroler) => this.kontroler = kontroler;
@@ -31,12 +29,14 @@ namespace AppGraZaDuzoZaMaloCLI
             bool sukces = false;
             while (!sukces)
             {
-                Write("Podaj swoją propozycję (lub " + KontrolerCLI.ZNAK_ZAKONCZENIA_GRY + " aby przerwać): ");
+                Write($"Podaj swoją propozycję ({KontrolerCLI.ZNAK_ZAKONCZENIA_GRY} aby przerwać, {KontrolerCLI.GAME_PAUSE_SIGN} aby zawiesić): ");
                 try
                 {
                     string value = ReadLine().TrimStart().ToUpper();
-                    if (value.Length > 0 && value[0].Equals(ZNAK_ZAKONCZENIA_GRY))
+                    if (value.Length > 0 && value[0].Equals(KontrolerCLI.ZNAK_ZAKONCZENIA_GRY))
                         throw new KoniecGryException();
+                    else if (value.Length > 0 && value[0].Equals(KontrolerCLI.GAME_PAUSE_SIGN))
+                        throw new PauseGameException();
 
                     //UWAGA: ponizej może zostać zgłoszony wyjątek 
                     wynik = Int32.Parse(value);
@@ -55,6 +55,10 @@ namespace AppGraZaDuzoZaMaloCLI
                 catch (KoniecGryException)
                 {
                     throw new KoniecGryException();
+                }
+                catch (PauseGameException)
+                {
+                    throw new PauseGameException();
                 }
                 catch (Exception)
                 {
@@ -97,9 +101,16 @@ namespace AppGraZaDuzoZaMaloCLI
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                     WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}.");
-                    WriteLine($"Całkowity czas gry: {kontroler.CalkowityCzasGry}, status: {ruch.StatusGry}.");
+                    WriteLine($"Całkowity czas gry: {kontroler.CalkowityCzasGry}");
+                    WriteLine($"Status: {ruch.StatusGry}.");
                     Console.ResetColor();
                 } 
+                else if(ruch.StatusGry == Gra.Status.Zawieszona)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    WriteLine($"Nr: {i}, czas: {time}, status: {ruch.StatusGry}.");
+                    Console.ResetColor();
+                }
                 else
                 {
                     WriteLine($"Nr: {i}, propozycja: {ruch.Liczba:D2}, odpowiedź: {ruch.Wynik}, czas: {time}, status: {ruch.StatusGry}.");
@@ -138,6 +149,12 @@ namespace AppGraZaDuzoZaMaloCLI
             WriteLine($"Minimalna liczba: {game.MinLiczbaDoOdgadniecia}");
             WriteLine($"Maksymalna liczba: {game.MaxLiczbaDoOdgadniecia}");
             WriteLine();
+        }
+
+        public void PauseGame()
+        {
+            Console.WriteLine("========================");
+            Console.WriteLine("= Game has been paused =");
         }
     }
 

@@ -118,7 +118,32 @@ namespace GraZaDuzoZaMalo.Model
         /// Zwraca aktualny stan gry, od chwili jej utworzenia (wywołania konstruktora) do momentu wywołania tej własciwości.
         /// </summary>
         public TimeSpan AktualnyCzasGry => DateTime.Now - CzasRozpoczecia;
-        public TimeSpan CalkowityCzasGry => (StatusGry == Status.WTrakcie) ? AktualnyCzasGry : (TimeSpan)(CzasZakonczenia - CzasRozpoczecia);
+        public TimeSpan CalkowityCzasGry => (StatusGry == Status.WTrakcie || StatusGry == Status.Zawieszona) 
+            ? (AktualnyCzasGry - TotalPausedTime)
+            : (TimeSpan)(CzasZakonczenia - CzasRozpoczecia - TotalPausedTime);
+
+        private List<DateTime> _pausedGameTimes = new List<DateTime>();
+
+        public TimeSpan TotalPausedTime
+        {
+            get
+            {
+                List<DateTime> times = this._pausedGameTimes;
+                int count = times.Count;
+                
+
+                TimeSpan total = default;
+                for(int i = 0; i < count; i+=2)
+                {
+                    var endOfPause = (i + 1 < count) ? times[i + 1] : DateTime.Now;
+                    var startOfPause = times[i];
+
+                    total += endOfPause - startOfPause;
+                }
+
+                return total;
+            }
+        }
 
         public Gra(int min, int max)
         {
@@ -179,6 +204,25 @@ namespace GraZaDuzoZaMalo.Model
             return liczbaDoOdgadniecia;
         }
 
+        public void PauseGame()
+        {
+            if (StatusGry == Status.WTrakcie)
+            {
+                StatusGry = Status.Zawieszona;
+                _pausedGameTimes.Add(DateTime.Now);
+                listaRuchow.Add(new Ruch(null, null, Status.Zawieszona));
+            }
+        }
+
+        public void UnPauseGame()
+        {
+            if(StatusGry == Status.Zawieszona)
+            {
+                StatusGry = Status.WTrakcie;
+                _pausedGameTimes.Add(DateTime.Now);
+                listaRuchow.Add(new Ruch(null, null, Status.WTrakcie));
+            }
+        }
 
         // struktury wewnętrzne, pomocnicze
         public enum Odpowiedz

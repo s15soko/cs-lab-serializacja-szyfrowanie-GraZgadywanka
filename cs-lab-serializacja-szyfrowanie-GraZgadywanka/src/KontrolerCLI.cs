@@ -12,6 +12,7 @@ namespace AppGraZaDuzoZaMaloCLI
     public class KontrolerCLI
     {
         public const char ZNAK_ZAKONCZENIA_GRY = 'X';
+        public const char GAME_PAUSE_SIGN = 'P';
 
         private Gra gra;
         private WidokCLI widok;
@@ -77,21 +78,39 @@ namespace AppGraZaDuzoZaMaloCLI
 
             do
             {
+                while(gra.StatusGry == Gra.Status.Zawieszona)
+                {
+                    widok.CzyscEkran();
+                    if (widok.ChceszKontynuowac("Game is paused, do you want to play (t/n)?"))
+                    {
+                        gra.UnPauseGame();
+                    }
+                }
+
                 //wczytaj propozycję
                 int propozycja = 0;
                 try
                 {
                     propozycja = widok.WczytajPropozycje();
                 }
-                catch( KoniecGryException)
+                catch (PauseGameException)
+                {
+                    gra.PauseGame();
+                    widok.PauseGame();
+                }
+                catch ( KoniecGryException)
                 {
                     gra.Przerwij();
                     Gra.SaveGame(gra);
                     CanContinue = false;
                 }
 
-                if (gra.StatusGry == Gra.Status.Poddana) 
+                if (gra.StatusGry == Gra.Status.Poddana) {
                     break;
+                }
+                else if (gra.StatusGry == Gra.Status.Zakonczona) {
+                    continue;
+                }
 
                 Console.WriteLine(propozycja);
 
@@ -115,7 +134,7 @@ namespace AppGraZaDuzoZaMaloCLI
                 }
                 
             }
-            while (gra.StatusGry == Gra.Status.WTrakcie);
+            while (gra.StatusGry == Gra.Status.WTrakcie || gra.StatusGry == Gra.Status.Zawieszona);
                       
             //if StatusGry == Przerwana wypisz poprawną odpowiedź
             //if StatusGry == Zakończona wypisz statystyki gry
@@ -187,5 +206,14 @@ namespace AppGraZaDuzoZaMaloCLI
         protected KoniecGryException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+    }
+
+    internal class PauseGameException: Exception
+    {
+        public PauseGameException() {}
+
+        public PauseGameException(string message) : base(message) {}
+
+        public PauseGameException(string message, Exception innerException) : base(message, innerException) {}
     }
 }
