@@ -99,8 +99,7 @@ namespace GraZaDuzoZaMalo.Model
         /// </remarks>
         public Status StatusGry { get; private set; }
 
-        private List<Ruch> listaRuchow { get; set; }
-
+        private List<Ruch> listaRuchow;
         public IReadOnlyList<Ruch> ListaRuchow { get { return listaRuchow.AsReadOnly(); } }
 
         /// <summary>
